@@ -1,6 +1,5 @@
 cd  /path/to/astra-sim
 ASTRA_SIM="$PWD"
-git config --global --add safe.directory "*"
 git submodule update --init --recursive
 
 python3 -m venv chakra_env
