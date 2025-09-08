@@ -1,29 +1,31 @@
-## ******************************************************************************
-## This source code is licensed under the MIT license found in the
-## LICENSE file in the root directory of this source tree.
-##
-## Copyright (c) 2024 Georgia Institute of Technology
-## ******************************************************************************
-
-## Use Ubuntu
 FROM ubuntu:22.04
-LABEL maintainer="Will Won <william.won@gatech.edu>"
-LABEL maintainer="Jinsun Yoo <jinsun@gatech.edu>"
+LABEL maintainer="Andrew Geyko <ageyko@mpi-sws.org>"
 
 
-### ================== System Setups ======================
-## Install System Dependencies
 ENV DEBIAN_FRONTEND=noninteractive
-RUN apt -y update
-RUN apt -y install \
-    coreutils wget vim git \
-    gcc g++ clang-format \
-    make cmake \
-    libboost-dev libboost-program-options-dev \
-    openmpi-bin openmpi-doc libopenmpi-dev \
-    python3.11 python3-pip python3-venv \
-    graphviz
 
+# Install all dependencies in one layer
+RUN apt-get update && apt-get install -y \
+    coreutils \
+    wget \
+    vim \
+    git \
+    gcc-11 \
+    g++-11 \
+    make \
+    cmake \
+    clang-format \
+    libboost-dev \
+    libboost-program-options-dev \
+    python3 \
+    python3-pip \
+    python3-venv \
+    libprotobuf-dev \
+    protobuf-compiler \
+    openmpi-bin \
+    openmpi-doc \
+    libopenmpi-dev \
+ 
 ## Create Python venv: Required for Python 3.11
 RUN python3 -m venv /opt/venv/astra-sim
 ENV PATH="/opt/venv/astra-sim/bin:$PATH"
@@ -35,11 +37,6 @@ ENV PYTHONPATH="/app/astra-sim"
 # STG dependencies
 RUN pip3 install numpy sympy graphviz pandas
 ### ======================================================
-
-
-### ====== Abseil Installation: Protobuf Dependency ======
-## Download Abseil 20240722.0 (Latest LTS as of 10/31/2024)
-ARG ABSL_VER=20240722.0
 
 # Download source
 WORKDIR /opt
@@ -56,11 +53,6 @@ RUN cmake .. \
 RUN cmake --build . --target install --config Release --parallel $(nproc)
 ENV absl_DIR="/opt/abseil-cpp-${ABSL_VER}/install"
 ### ======================================================
-
-
-### ============= Protobuf Installation ==================
-## Download Protobuf 29.0 (=v5.29.0, latest stable version as of Feb/01/2025)
-ARG PROTOBUF_VER=29.0
 
 # Download source
 WORKDIR /opt
@@ -87,8 +79,5 @@ RUN pip3 install protobuf==5.${PROTOBUF_VER}
 ENV PROTOBUF_FROM_SOURCE=True
 ### ======================================================
 
-
-### ================== Finalize ==========================
-## Move to the application directory
-WORKDIR /app/astra-sim
-### ======================================================
+### ==================== Clone Directory ===========================
+WORKDIR /app/

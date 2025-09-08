@@ -1,3 +1,27 @@
+# Setup
+Build the docker file with
+```bash
+docker build -t container_name .
+```
+Then, run the docker container with
+```bash
+docker run -it --entrypoint bash container_name
+```
+Once inside the docker image, close the repository with
+```bash
+git clone https://github.com/gordofreemo/astra-sim
+```
+
+Finally, run set.up within the astra-sim repository
+```bash
+bash setup.sh
+```
+
+To activate chakra tooling, activate the python environment
+```bash
+source chakra_env/bin/activate
+```
+
 # ASTRA-sim
 [ASTRA-sim](https://astra-sim.github.io/) is a distributed AI system simulator. It models the end-to-end software and hardware stack of modern AI systems - encompassing workload scheduling, collective communication algorithms, and hardware architectures (compute/memory/network). Through a suite of APIs, it enables plug-and-play of external open/proprietary components for modeling different parts of the AI system. This provides end-to-end multi-fidelity simulation capabilities for aiding in design and deployment of next-generation distributed AI systems. 
 
