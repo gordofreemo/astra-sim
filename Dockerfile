@@ -24,7 +24,7 @@ RUN apt-get update && apt-get install -y \
     protobuf-compiler \
     openmpi-bin \
     openmpi-doc \
-    libopenmpi-dev \
+    libopenmpi-dev 
  
 ## Create Python venv: Required for Python 3.11
 RUN python3 -m venv /opt/venv/astra-sim
@@ -38,6 +38,7 @@ ENV PYTHONPATH="/app/astra-sim"
 RUN pip3 install numpy sympy graphviz pandas
 ### ======================================================
 
+ARG ABSL_VER=20240722.0
 # Download source
 WORKDIR /opt
 RUN wget https://github.com/abseil/abseil-cpp/releases/download/${ABSL_VER}/abseil-cpp-${ABSL_VER}.tar.gz
@@ -54,6 +55,7 @@ RUN cmake --build . --target install --config Release --parallel $(nproc)
 ENV absl_DIR="/opt/abseil-cpp-${ABSL_VER}/install"
 ### ======================================================
 
+ARG PROTOBUF_VER=29.0
 # Download source
 WORKDIR /opt
 RUN wget https://github.com/protocolbuffers/protobuf/releases/download/v${PROTOBUF_VER}/protobuf-${PROTOBUF_VER}.tar.gz
